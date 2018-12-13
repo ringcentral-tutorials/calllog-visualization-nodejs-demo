@@ -2,6 +2,6 @@ PRINT_LOG=yes
 PORT=3002
 SERVER=https://platform.devtest.ringcentral.com
 CLIENT_ID=YourClientID
-CLIENT_ID=YourClientSecret
+CLIENT_SECRET=YourClientSecret
 USERNAME=
 PASSWORD=
