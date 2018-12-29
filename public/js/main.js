@@ -30,6 +30,7 @@ function CallLogsData(records) {
   this.outcallCount = 0
   this.voiceCallCount = 0
   this.voicemailCount = 0
+  this.faxCallCount = 0
 
   this.infaxCount = 0
   this.outfaxCount = 0
@@ -73,6 +74,7 @@ function CallLogsData(records) {
           this.__addItemToExistingList(record.action, this.faxOutboundActions)
           this.__addItemToExistingList(record.result, this.faxOutboundResults)
         }
+        this.faxCallCount += 1
       }else{ // voice call
         if (record.direction == "Inbound") {
           this.incallCount += 1
@@ -194,13 +196,10 @@ CallLogsData.prototype = {
     var params = [];
     var arr = ['Voice vs. Fax', 'Type', { role: "style" } ];
     params.push(arr);
-
-    var calls = this.incallCount + this.outcallCount
-    item = ["Voice", this.voiceCallCount, "green"];
+    var item = ["Voice", this.voiceCallCount, "green"];
     params.push(item);
 
-    var faxes = this.infaxCount + this.outfaxCount
-    var item = ["Fax", faxes, "blue"];
+    item = ["Fax", this.faxCallCount, "blue"];
     params.push(item);
     drawBarChart(w, h, params);
   },
@@ -638,7 +637,7 @@ function drawScatterChart(w, h, params, title) {
       title: title,
       width: w,
       height: h,
-      hAxis: {title: '24-Hour'},
+      hAxis: {viewWindow: { min: 0, max: 23 }, title: '24-Hour'},
       vAxis: {title: 'Calls'},
       pointShape: 'diamond',
       legend: 'none',

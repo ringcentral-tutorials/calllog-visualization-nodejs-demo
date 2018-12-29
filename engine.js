@@ -27,7 +27,9 @@ var engine = module.exports = {
         endpoint = '/account/~/call-log'
       else
         endpoint = '/account/~/extension/~/call-log'
-
+      if (process.env.PRINT_LOG == "yes"){
+        console.log(req.body)
+      }
       platform.get(endpoint, req.body)
       .then(function(resp){
         var json = resp.json()

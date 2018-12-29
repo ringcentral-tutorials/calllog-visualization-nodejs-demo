@@ -7,17 +7,21 @@ RingCentral Connect Platform is a rich RESTful API platform with more than 70 AP
 ### RingCentral Developer Portal
 To setup a free developer account, click [https://developer/ringcentral.com](here)
 
-### Clone the project
+### Clone - Setup - Run the project
 ```
 git clone https://github.com/ringcentral-tutorials/calllog-visualization-nodejs-demo
 
 cd calllog-visualization-nodejs-demo
 
-npm intall --save
+npm install --save
 
 cp dotenv .env
+
+node index.js
 ```
 Remember to add your app client ID and client secret as well as account login credentials to the .env file.
+
+Open your Web browser and enter localhost:5000
 
 ## RingCentral JavaScript/Node JS SDK
 The SDK is available at https://github.com/ringcentral/ringcentral-js
