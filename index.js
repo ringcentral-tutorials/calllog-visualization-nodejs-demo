@@ -19,9 +19,9 @@ console.log("listen to port " + port)
 var rc_engine = require('./engine');
 
 app.get('/', function (req, res) {
-  rc_engine.login(req, res)
+  res.render('index');
 })
 
 app.post('/readlogs', function (req, res) {
-  rc_engine.readCallLogs(req, res)
+  rc_engine.login(req, res)
 })

@@ -1,44 +1,56 @@
 var RC = require('ringcentral')
 require('dotenv').load()
 
-var rcsdk = new RC({
-    server:RC.server.sandbox,
-    appKey: process.env.CLIENT_ID,
-    appSecret:process.env.CLIENT_SECRET
+var rcsdk = null
+if (process.env.ENVIRONMENT_MODE == "production"){
+  rcsdk = new RC({
+    server:RC.server.production,
+    appKey: process.env.CLIENT_ID_PROD,
+    appSecret:process.env.CLIENT_SECRET_PROD,
   })
+}else{
+  rcsdk = new RC({
+      server:RC.server.sandbox,
+      appKey: process.env.CLIENT_ID_SB,
+      appSecret:process.env.CLIENT_SECRET_SB
+    })
+}
+
 var platform = rcsdk.platform()
 
 var engine = module.exports = {
     login: function(req, res){
+      var un = ""
+      var pwd = ""
+      if (process.env.ENVIRONMENT_MODE == "production"){
+        un= process.env.USERNAME_PROD
+        pwd= process.env.PASSWORD_PROD
+      }else{
+        un= process.env.USERNAME_SB
+        pwd= process.env.PASSWORD_SB
+      }
+
       platform.login({
-        username:process.env.USERNAME,
-        password:process.env.PASSWORD
+        username:un,
+        password:pwd
       })
       .then(function(resp){
-        res.render('index')
+        engine.readCallLogs(req, res)
       })
       .catch(function(e){
-        throw e
+        var errorRes = {}
+        errorRes['calllog_error'] = "Cannot login."
+        res.send(JSON.stringify(errorRes))
       })
     },
     readCallLogs(req, res){
-      var endpoint = ""
+      var endpoint = "/account/~/extension/~/call-log"
       if (req.query.access == "account")
-        endpoint = '/account/~/call-log'
-      else
-        endpoint = '/account/~/extension/~/call-log'
-      if (process.env.PRINT_LOG == "yes"){
-        console.log(req.body)
-      }
+        endpoint = "/account/~/call-log"
+
       platform.get(endpoint, req.body)
       .then(function(resp){
         var json = resp.json()
-        if (process.env.PRINT_LOG == "yes"){
-          for (var record of json.records){
-            console.log(JSON.stringify(record))
-            console.log("------")
-          }
-        }
         res.send(JSON.stringify(json.records))
       })
       .catch(function(e){
