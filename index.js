@@ -22,6 +22,6 @@ app.get('/', function (req, res) {
   res.render('index');
 })
 
-app.post('/readlogs', function (req, res) {
-  rc_engine.login(req, res)
+app.post('/readlogs', async function (req, res) {
+  await rc_engine.login(req, res)
 })
